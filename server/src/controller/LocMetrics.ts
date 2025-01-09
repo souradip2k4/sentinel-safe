@@ -98,6 +98,7 @@ export async function getLocMetrics(req: CustomRequest, res: Response) {
             campusName: true,
             latitude: true,
             longitude: true,
+            id: true
           },
         },
       },
