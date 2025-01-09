@@ -44,7 +44,6 @@ export async function createReview(req: CustomRequest, res: Response) {
       },
     });
 
-
     return  res
       .status(201)
       .send(new CustomResponse("Review created successfully", reviewData));
