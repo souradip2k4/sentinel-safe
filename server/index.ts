@@ -42,7 +42,7 @@ app.use("/init", authToken, initRoutes);
 // app.use("/auth", authRoutes);
 app.use("/geo", authToken, getCodeRoutes);
 app.use("/metrics", locMetricsRoutes);
-app.use("/reviews", authToken, userReviewRoutes);
+// app.use("/reviews", authToken, userReviewRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({

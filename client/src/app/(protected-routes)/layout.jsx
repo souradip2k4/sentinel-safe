@@ -4,6 +4,7 @@ import {auth} from "@/firebase.config";
 import {onAuthStateChanged} from "firebase/auth";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
+import SkeletonUI from "@/components/SkeletonUI";
 
 export default function RootLayout({children}) {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,12 +22,12 @@ export default function RootLayout({children}) {
   }, []);
 
 
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+  /*  useEffect(() => {
+      console.log(isLoading);
+    }, [isLoading]);*/
 
   if (!isLoading) {
-    return <div>Loading...</div>
+    return <SkeletonUI />;
   }
   return (
     <>{children}</>

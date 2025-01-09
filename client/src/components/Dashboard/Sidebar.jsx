@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Rating from "@mui/material/Rating";
 import Button from "@mui/material/Button";
+import {auth} from "@/firebase.config";
+import toast from "react-hot-toast";
 
 const Sidebar = ({collapsed, setCollapsed}) => {
   const [expanded, setExpanded] = useState(true);
@@ -31,31 +33,53 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 
   const staticReviews = [
     {
-      name: "Sara Advani",
+      name: "Souradip Saha",
       sentiment: 5,
       review:
-        "Well crowded and safe. One can pass via the campus any time of the day",
+        "The campus is well-crowded and safe. It's accessible at any time of the day.",
     },
     {
-      name: "alina",
+      name: "Kumar Priyanshu",
       sentiment: 4.5,
-      review: "Well lit and safe",
+      review: "The area is well-lit and feels safe at night.",
     },
     {
-      name: "Afreen garg",
-      sentiment: 1,
+      name: "Riya Gupta",
+      sentiment: 3.5,
       review:
-        "After 10pm the area is deserted so during that time it's not safe to visit that area",
+        "After 10 PM, the area becomes quite deserted, making it unsafe during late hours.",
+    },
+    {
+      name: "Soudeep Ghoshal",
+      sentiment: 4.5,
+      review:
+        "The area is calm and peaceful, but it's better to avoid it after late evenings.",
+    },
+    {
+      name: "Ananya Roy",
+      sentiment: 5,
+      review:
+        "The environment is serene and safe for a walk even during the early hours of the day.",
     },
   ];
+
 
   const handleAccordionToggle = () => {
     setExpanded(!expanded);
   };
 
+  async function addUserReviews (){
+    if(!auth.currentUser.isAnonymous){
+      setOpen(true);
+
+    } else {
+      toast.error("Register your account to add user reviews");
+    }
+  }
+
   return (
     <div
-      className={`absolute bg-gray-900  text-white transition duration-300 z-10 top-0 md:h-full h-[90vh] w-full ${
+      className={`absolute  z-50 bg-gray-900  text-white transition duration-300  top-0 md:h-full h-[90vh] w-full ${
         collapsed
           ? "translate-x-full hidden"
           : "translate-x-0"
@@ -77,35 +101,23 @@ const Sidebar = ({collapsed, setCollapsed}) => {
           <div className="flex items-center gap-1">
             <span className="text-green-400">👥</span> {staticMetrics.peopleCount}
           </div>
-          <div className="flex items-center gap-1">
-            <span className="text-green-400">🚶</span> {staticMetrics.avgSpeed}{" "}
-            kmph
-          </div>
         </div>
 
         {/* Overview Section */}
-        <Accordion
-          defaultExpanded
-          onChange={handleAccordionToggle}
-          style={{
-            background: "#f1f1f194",
-            borderRadius: "10px",
-            overflowY: "scroll",
-            marginTop: "1rem",
-          }}
+        <div className={"h-36"}
+             style={{
+               background: "#f1f1f194",
+               borderRadius: "10px",
+               overflowY: "scroll",
+               marginTop: "1rem",
+             }}
         >
-          <AccordionSummary
-            aria-controls="panel1-content"
-            id="panel1-header"
-            className="outline-transparent border-transparent overflow-y-scroll text-center items-center flex flex-col"
-          >
             <span className={"w-full"}>
              Overview <span>&nbsp;of {staticMetrics.campusName}</span>
           </span>
 
-          </AccordionSummary>
-          <AccordionDetails
-            className="outline-transparent border-transparent overflow-y-scroll p-3 flex justify-around"
+          <div
+            className="outline-transparent border-transparent p-3 flex justify-around"
             style={{background: "#f1f1f194"}}
           >
             <Typography className="font-extralight flex gap-1">
@@ -117,8 +129,8 @@ const Sidebar = ({collapsed, setCollapsed}) => {
                 readOnly
               />
             </Typography>
-          </AccordionDetails>
-        </Accordion>
+          </div>
+        </div>
 
         {/* Reviews Section */}
         <div className="mb-4 overflow-y-scroll">
@@ -217,7 +229,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
 
         {/* Add Review Button */}
         <button
-          onClick={() => setOpen(true)}
+          onClick={addUserReviews}
           className="text-green-400 border-5 text-center w-full absolute bottom-3 right-0 z-100 pt-4 mt-4 bg-gray-900 "
         >
           ADD REVIEWS <AddCircleOutlineRoundedIcon fontSize="medium"/>

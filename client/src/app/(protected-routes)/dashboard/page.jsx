@@ -35,22 +35,28 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="h-screen  w-screen overflow-scroll">
+    <div className="h-screen  w-screen overflow-hidden">
       <Navbar/>
       <Toaster/>
-      <div className="relative flex md:flex-row flex-col bg-green-300"
-           style={{
-             height: height,
-           }}
+      <div className="relative flex md:flex-row flex-col bg-green-300 h-full"
+
       >
-        <Location/>
+        <div className={"w-full h-full relative"}>
+          <div className={"absolute bottom-0 h-full w-full"}>
+            <Location/>
+          </div>
+        </div>
+
 
         <MenuIcon
           onClick={() => setCollapsed(!collapsed)}
           sx={{fontSize: "40px"}}
           className="hover:text-green-200 bg-gray-900 text-white p-2 rounded-lg cursor-pointer absolute top-5 right-5"
         />
-        <div className={"md:relative md:h-full md:w-fit"}>
+        <div className={"md:relative md:h-full md:w-fit"}
+             style={{
+               height: height,
+             }}>
           <Sidebar
             collapsed={collapsed}
             setCollapsed={setCollapsed}
