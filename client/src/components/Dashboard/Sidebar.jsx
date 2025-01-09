@@ -97,23 +97,20 @@ const Sidebar = ({collapsed, setCollapsed}) => {
         />
 
         {/* Metrics Section */}
-        <div className="border flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
+       {/* <div className="border flex items-center justify-evenly rounded-lg p-3 text-white text-bold">
           <div className="flex items-center gap-1">
             <span className="text-green-400">👥</span> {staticMetrics.peopleCount}
           </div>
-        </div>
+        </div>*/}
 
         {/* Overview Section */}
-        <div className={"h-36"}
-             style={{
-               background: "#f1f1f194",
-               borderRadius: "10px",
-               overflowY: "scroll",
-               marginTop: "1rem",
-             }}
+        <div
+          className={
+            "h-36 bg-[#f1f1f194] border rounded-[10px] overflow-y-scroll mt-4"
+          }
         >
-            <span className={"w-full h-10"}>
-             Overview <span>&nbsp;of {staticMetrics.campusName}</span>
+          <span className={"w-full text-center h-10 p-4"}>
+             Overview &nbsp;of {staticMetrics.campusName}
           </span>
 
           <div
