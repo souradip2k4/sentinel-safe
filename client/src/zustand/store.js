@@ -12,7 +12,7 @@ const locationMatrixSlice = (set) => ({
   fetchLocationMatrix: async (token) => {
     try {
       const response = await getLocationMatrices(token);
-      const metricsResponse = response.data;
+      const metricsResponse = response.data.data;
       const metricsArray = metricsResponse.map(item => ({
         id: item.id,
         areaRating: item.areaRating,
@@ -26,10 +26,11 @@ const locationMatrixSlice = (set) => ({
 
       set({metrics: metricsArray})
     } catch (error) {
+      // console.log(error);
       if (error instanceof AxiosError) {
         throw new Error(error.response.data.message);
       } else {
-        throw new Error("Something went wrong. Refresh the page!");
+        throw new Error(error.message);
       }
     }
   },

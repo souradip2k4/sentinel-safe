@@ -3,35 +3,111 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import {Marker, Map, Source, Layer} from "react-map-gl";
-import {sampleData} from "@/lib/sampleData";
 import haversine from "haversine-distance";
 import useStore from "@/zustand/store";
 import {auth} from "@/firebase.config";
 import {useShallow} from "zustand/react/shallow";
-import metrics from "@/components/Dashboard/metrics";
+import toast from "react-hot-toast";
 
-const features = sampleData.map((item) => ({
-  type: "Feature",
-  geometry: {
-    type: "Point",
-    coordinates: [parseFloat(item.longitude), parseFloat(item.latitude)],
+const metrics1 = [
+  {
+    "id": "b3f74919-854c-41f0-a257-83b52125618b",
+    "areaRating": 3,
+    "GeoCode": {
+      "campusName": "Campus 12",
+      "latitude": "20.349806588028613",
+      "longitude": "85.81989800796583"
+    }
   },
-  properties: {
-    campusName: item.campusName,
-    color: "#4ade80",
+  {
+    "id": "6d59a4aa-e1dd-4f08-824e-06650cb04d89",
+    "areaRating": 4,
+    "GeoCode": {
+      "campusName": "Campus 3",
+      "latitude": "20.359060790552633",
+      "longitude": "85.82273042068533"
+    }
   },
-}));
+  {
+    "id": "765972a4-d1de-4384-b49d-79588d729a21",
+    "areaRating": 4.2,
+    "GeoCode": {
+      "campusName": "Campus 15",
+      "latitude": "20.3589803216163",
+      "longitude": "85.81232344970715"
+    }
+  },
+  {
+    "id": "7bf93858-53ad-4342-9779-3bb2b07cdc95",
+    "areaRating": 4.5,
+    "GeoCode": {
+      "campusName": "Campus 18",
+      "latitude": "20.354554465549313",
+      "longitude": "85.82202231750614"
+    }
+  },
+  {
+    "id": "d2a2624b-15a3-44fd-b096-08e45d266e92",
+    "areaRating": 3.5,
+    "GeoCode": {
+      "campusName": "Campus 14",
+      "latitude": "20.353950929892974",
+      "longitude": "85.81313884124859"
+    }
+  },
+  {
+    "id": "7c491f54-bea7-495e-8526-fe8200eaba30",
+    "areaRating": 4,
+    "GeoCode": {
+      "campusName": "Campus 7",
+      "latitude": "20.35648576379556",
+      "longitude": "85.8157352195741"
+    }
+  },
+  {
+    "id": "5a92ef9a-ad2c-4d71-8f56-01f834e8cf70",
+    "areaRating": 3.5,
+    "GeoCode": {
+      "campusName": "Campus 25",
+      "latitude": "20.3505912049731",
+      "longitude": "85.81599271164026"
+    }
+  }
+]
 
 const LocationPage = () => {
-  const {locationMetrics, fetchLocationMetrics} = useStore(useShallow(state => ({
-    locationMetrics: state.locationMetrics,
-    fetchLocationMetrics: state.locationMetrics
+  const {metrics, fetchLocationMatrix} = useStore(useShallow((state) => ({
+    metrics: state.metrics,
+    fetchLocationMatrix: state.fetchLocationMatrix,
   })));
 
   useEffect(() => {
+    (async function () {
+      try {
+        const authToken = await auth.currentUser.getIdToken(true);
+        await fetchLocationMatrix(authToken);
+      } catch (e) {
+        toast.error(e.message);
+      }
+      const authToken = await auth.currentUser.getIdToken(true);
+      fetchLocationMatrix(authToken);
+    })();
 
+  }, [fetchLocationMatrix]);
 
-  }, [locationMetrics]);
+  // console.log(metrics);
+  const features = metrics1.map((item) => ({
+    type: "Feature",
+    geometry: {
+      type: "Point",
+      coordinates: [parseFloat(item.GeoCode.longitude), parseFloat(item.GeoCode.latitude)],
+    },
+    properties: {
+      campusName: item.GeoCode.campusName,
+      color: "#4ade80",
+      areaRating: item.areaRating
+    },
+  }));
 
   const geoJson = useMemo(
     () => ({
@@ -101,7 +177,7 @@ const LocationPage = () => {
       };
 
       if (isClickInCircle(clickPoint, circleCenter, CIRCLE_RADIUS)) {
-        // console.log("Circle clicked:", properties.campusName, circleCenter);
+        console.log("Circle clicked:", properties.campusName, circleCenter);
 
         // Make an API call with the circle's center point
 
@@ -111,10 +187,6 @@ const LocationPage = () => {
       }
     }
   }, []);
-
-  /*  useEffect(() => {
-      console.log(marker);
-    }, [marker]);*/
 
   return (
     <Map
@@ -161,7 +233,13 @@ const LocationPage = () => {
           type="circle"
           paint={{
             "circle-radius": 50,
-            "circle-color": ["get", "color"],
+            "circle-color": [
+              "case",
+              [">=", ["get", "areaRating"], 4], "#4ade80",
+              [">=", ["get", "areaRating"], 3.5], "#facc15",
+              [">=", ["get", "areaRating"], 3], "#f97316",
+              "#dc2626"
+            ],
             "circle-opacity": 0.5,
           }}
         />

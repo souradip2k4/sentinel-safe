@@ -6,11 +6,14 @@ const apiClient = axios.create({
 });
 
 export const getLocationMatrices = async (token) => {
-  return await apiClient.get("/metrics", {
+  const result = await apiClient.get("/metrics", {
     headers: {
       Authorization: `Bearer ${token}`
     }
   })
+
+  // console.log(result.data.data);
+  return result;
 }
 
 export const getUserReviews = async (token) => {
