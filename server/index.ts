@@ -35,14 +35,14 @@ app.use(cookieParser());
 
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
-  cors: {origin: "*", methods: ["GET", "POST"]},
+  cors: {origin: process.env.CLIENT_ORIGIN as string, methods: ["GET", "POST"]},
 });
 
 app.use("/init", authToken, initRoutes);
 // app.use("/auth", authRoutes);
 app.use("/geo", authToken, getCodeRoutes);
 app.use("/metrics", locMetricsRoutes);
-// app.use("/reviews", authToken, userReviewRoutes);
+app.use("/reviews", authToken, userReviewRoutes);
 
 app.use("/", (req: Request, res: Response) => {
   res.status(200).send({

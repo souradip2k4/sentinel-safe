@@ -68,8 +68,8 @@ const Sidebar = ({collapsed, setCollapsed}) => {
     setExpanded(!expanded);
   };
 
-  async function addUserReviews (){
-    if(!auth.currentUser.isAnonymous){
+  async function addUserReviews() {
+    if (!auth.currentUser.isAnonymous) {
       setOpen(true);
 
     } else {
@@ -85,7 +85,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
           : "translate-x-0"
       } md:right-0 md:h-full md:w-[310px]`}
     >
-      <div className={"relative p-5 pt-2 flex flex-col justify-between w-full h-full "}>
+      <div className={"relative p-5 pt-2 flex flex-col justify-between w-full h-full"}>
         <CloseIcon
           sx={{
             marginBottom: "1rem",
@@ -112,7 +112,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
                marginTop: "1rem",
              }}
         >
-            <span className={"w-full"}>
+            <span className={"w-full h-10"}>
              Overview <span>&nbsp;of {staticMetrics.campusName}</span>
           </span>
 
