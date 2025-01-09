@@ -12,16 +12,18 @@ export const getLocationMatrices = async (token) => {
     }
   })
 
-  // console.log(result.data.data);
+  console.log(result.data.data);
   return result;
 }
 
 export const getUserReviewsById = async (token, id) => {
-  return await apiClient.get(`/reviews/g/${id}`, {
+  const res = await apiClient.get(`/reviews/g/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
   });
+  console.log(res)
+  return res;
 }
 
 export const createReview = async (token, data) => {

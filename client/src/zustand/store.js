@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import {devtools, persist} from "zustand/middleware";
-import {getLocationMatrices} from "@/lib/axios";
+import {getLocationMatrices, getUserReviewsById} from "@/lib/axios";
 import {AxiosError} from "axios";
 import metrics from "@/components/Dashboard/metrics";
 
@@ -18,6 +18,7 @@ const locationMatrixSlice = (set) => ({
         areaRating: item.areaRating,
         userRating: item.userRating,
         GeoCode: {
+          geoCodeId: item.GeoCode.id,
           campusName: item.GeoCode.campusName,
           latitude: item.GeoCode.latitude,
           longitude: item.GeoCode.longitude,
@@ -53,11 +54,35 @@ const locationMatrixSlice = (set) => ({
   }
 });
 
+const userReviews = (set) => ({
+  reviews: [],
 
-const userReviews = (set) => {
+  fetchUserReviews: async (token, id) => {
+    try {
+      console.log(id);
+      const response = await getUserReviewsById(token, id);
 
+      const reviews = response.data.data;
+      // console.log(reviews)
+      const reviewMetrics = reviews.map(item => ({
+        review: item.review,
+        rating: item.rating,
+        userName: item.userName
+      }))
 
-};
+      set({reviews: reviewMetrics});
+      console.log(reviews)
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error(error.message);
+      }
+    }
+  }
+
+});
 
 // Create the combined store
 export const useStore = create(
