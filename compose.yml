@@ -1,0 +1,45 @@
+version: "3"
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    ports:
+      - "3000:3000"
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    ports:
+      - "3300:3300"
+    environment:
+      - PORT=3300
+      - EMAIL_USERNAME=
+      - EMAIL_PASSWORD=
+      - DATABASE_URL=
+    depends_on:
+      - postgres
+
+  model:
+    build:
+      context: ./model
+      dockerfile: Dockerfile.model
+    environment:
+      - SERVER_URL=
+      - SERVICE_ACCOUNT=
+    depends_on:
+      - server
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:

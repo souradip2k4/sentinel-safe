@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model LocationMetrics {
+  id          String   @id @default(uuid())
+  lumen       Float    @default(0.0)
+  peopleCount Int      @default(0)
+  areaRating  Float    @default(0.0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  geoCodesId String
+  GeoCode    GeoCode @relation(fields: [geoCodesId], references: [id])
+}
+
+model GeoCode {
+  id         String   @id @default(uuid())
+  campusName String
+  latitude   String
+  longitude  String
+  camId      String[]
+  userRating Float    @default(0.0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  reviewCount     Int               @default(0)
+  reviews         UserReviews[]
+  LocationMetrics LocationMetrics[]
+}
+
+model UserReviews {
+  id        String   @id @default(uuid())
+  review    String
+  rating    Int
+  userName  String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  geoCodeId String?
+  GeoCode   GeoCode? @relation(fields: [geoCodeId], references: [id])
+}

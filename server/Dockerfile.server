@@ -1,0 +1,11 @@
+FROM node:20-alpine3.17 AS build
+WORKDIR /app
+COPY . .
+RUN yarn install
+RUN yarn lint
+RUN yarn build
+
+FROM gcr.io/distroless/nodejs20-debian12
+COPY --from=build /app/dist ./dist
+EXPOSE 3300
+CMD ["node", "dist/index.js"]

@@ -1,0 +1,13 @@
+python-dotenv
+spacy
+ultralytics
+opencv-python
+cvzone
+numpy
+scipy
+scikit-learn
+pandas
+torch
+firebase-admin
+transformers
+schedule
