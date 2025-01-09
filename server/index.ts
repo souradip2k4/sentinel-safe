@@ -35,7 +35,7 @@ app.use(cookieParser());
 
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
-  cors: {origin: "*", methods: ["GET", "POST"]},
+  cors: {origin: process.env.CLIENT_ORIGIN as string, methods: ["GET", "POST"]},
 });
 
 app.use("/init", authToken, initRoutes);
