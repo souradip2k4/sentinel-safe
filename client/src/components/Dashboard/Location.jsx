@@ -8,6 +8,7 @@ import useStore from "@/zustand/store";
 import {auth} from "@/firebase.config";
 import {useShallow} from "zustand/react/shallow";
 import toast from "react-hot-toast";
+import {set} from "zod";
 
 /*const metrics1 = [
   {
@@ -76,11 +77,12 @@ import toast from "react-hot-toast";
 ]*/
 
 const LocationPage = () => {
-  const {metrics, fetchLocationMatrix, fetchUserReviews, reviews} = useStore(useShallow((state) => ({
+  const {metrics, fetchLocationMatrix, fetchUserReviews, reviews, setGeoCodeId} = useStore(useShallow((state) => ({
     metrics: state.metrics,
     fetchLocationMatrix: state.fetchLocationMatrix,
     fetchUserReviews: state.fetchUserReviews,
-    reviews: state.reviews
+    reviews: state.reviews,
+    setGeoCodeId: state.setGeoCodeId
   })));
 
   useEffect(() => {
@@ -187,8 +189,9 @@ const LocationPage = () => {
 
         try {
           const userId = await auth.currentUser.getIdToken(true);
-          await fetchUserReviews(userId, properties.geoCodeId);
-          console.log(reviews);
+          setGeoCodeId(properties.geoCodeId);
+          await fetchUserReviews(userId, properties.geoCodeId, properties.campusName);
+          // console.log(reviews);
         } catch (error) {
           toast.error(error.message);
         }

@@ -63,9 +63,9 @@ const userReviews = (set) => ({
 
   setUserReview: (inputData) => {
     set((state) => {
-      console.log("Previous length: ", state.reviews.length);
+      // console.log("Previous length: ", state.reviews.length);
       const updatedReviews = [...state.reviews, inputData];
-      console.log("After length: ", updatedReviews.length);
+      // console.log("After length: ", updatedReviews.length);
       return { reviews: updatedReviews };
     });
   },
