@@ -1,35 +1,42 @@
-"use client"
+"use client";
 
-import {auth} from "@/firebase.config";
-import {onAuthStateChanged} from "firebase/auth";
-import {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
+import { auth } from "@/firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import SkeletonUI from "@/components/SkeletonUI";
 
-export default function RootLayout({children}) {
-  const [isLoading, setIsLoading] = useState(false);
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Promise resolved");
+    }, ms);
+  });
+}
 
+export default function RootLayout({ children }) {
+  const [isLoading, setIsLoading] = useState(true); // Start with loading state
   const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        setIsLoading(true);
-      } else {
-        router.replace("/auth");
-      }
-    })
+    const checkAuthState = async () => {
+      await delay(1500); // Introduce delay
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setIsLoading(false); // End loading state after delay
+        } else {
+          router.replace("/auth");
+        }
+      });
+    };
+
+    checkAuthState();
   }, []);
 
-
-  /*  useEffect(() => {
-      console.log(isLoading);
-    }, [isLoading]);*/
-
-  if (!isLoading) {
+  if (isLoading) {
     return <SkeletonUI />;
   }
-  return (
-    <>{children}</>
-  );
+
+  return <>{children}</>;
 }
