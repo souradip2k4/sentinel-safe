@@ -22,7 +22,7 @@ export const getUserReviewsById = async (token, id) => {
       Authorization: `Bearer ${token}`
     }
   });
-  console.log(res)
+  // console.log(res)
   return res;
 }
 
