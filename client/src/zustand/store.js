@@ -3,11 +3,10 @@ import {devtools, persist} from "zustand/middleware";
 import {getLocationMatrices, getUserReviewsById} from "@/lib/axios";
 import {AxiosError} from "axios";
 import metrics from "@/components/Dashboard/metrics";
+import reviews from "@/components/Dashboard/Reviews";
 
 const locationMatrixSlice = (set) => ({
   metrics: [],
-  /*update: ({latitude, longitude, campusName, id, areaRating, userRating}) =>
-    set({latitude, longitude, campusName, id, areaRating, userRating}),*/
 
   fetchLocationMatrix: async (token) => {
     try {
@@ -35,44 +34,24 @@ const locationMatrixSlice = (set) => ({
       }
     }
   },
-
-  locationMatricesId: ({longitude, latitude}) => {
-
-    if (metrics && metrics.length > 0) {
-      const locationMatrices = metrics.find(item => {
-        if (item.latitude === latitude && item.latitude === longitude) {
-          return item.id;
-        }
-        return null;
-      });
-
-      if (!locationMatrices) {
-        return "Location does not exists";
-      }
-      return locationMatrices;
-    }
-  }
 });
 
 const userReviews = (set) => ({
   reviews: [],
-
-  fetchUserReviews: async (token, id) => {
+  geoCodeId: null,
+  setGeoCodeId: (id) => set({ geoCodeId: id }),
+  fetchUserReviews: async (token, id, campusName) => {
     try {
-      console.log(id);
       const response = await getUserReviewsById(token, id);
-
       const reviews = response.data.data;
-      // console.log(reviews)
-      const reviewMetrics = reviews.map(item => ({
+      const reviewMetrics = reviews.map((item) => ({
         review: item.review,
         rating: item.rating,
-        userName: item.userName
-      }))
+        userName: item.userName,
+        campusName,
+      }));
 
-      set({reviews: reviewMetrics});
-      console.log(reviews)
-
+      set({ reviews: reviewMetrics });
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(error.response.data.message);
@@ -80,9 +59,19 @@ const userReviews = (set) => ({
         throw new Error(error.message);
       }
     }
-  }
+  },
 
+  setUserReview: (inputData) => {
+    set((state) => {
+      console.log("Previous length: ", state.reviews.length);
+      const updatedReviews = [...state.reviews, inputData];
+      console.log("After length: ", updatedReviews.length);
+      return { reviews: updatedReviews };
+    });
+  },
 });
+
+
 
 // Create the combined store
 export const useStore = create(
