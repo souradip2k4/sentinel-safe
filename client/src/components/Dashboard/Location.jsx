@@ -8,8 +8,9 @@ import useStore from "@/zustand/store";
 import {auth} from "@/firebase.config";
 import {useShallow} from "zustand/react/shallow";
 import toast from "react-hot-toast";
+import {set} from "zod";
 
-const metrics1 = [
+/*const metrics1 = [
   {
     "id": "b3f74919-854c-41f0-a257-83b52125618b",
     "areaRating": 3,
@@ -73,12 +74,15 @@ const metrics1 = [
       "longitude": "85.81599271164026"
     }
   }
-]
+]*/
 
 const LocationPage = () => {
-  const {metrics, fetchLocationMatrix} = useStore(useShallow((state) => ({
+  const {metrics, fetchLocationMatrix, fetchUserReviews, reviews, setGeoCodeId} = useStore(useShallow((state) => ({
     metrics: state.metrics,
     fetchLocationMatrix: state.fetchLocationMatrix,
+    fetchUserReviews: state.fetchUserReviews,
+    reviews: state.reviews,
+    setGeoCodeId: state.setGeoCodeId
   })));
 
   useEffect(() => {
@@ -96,13 +100,14 @@ const LocationPage = () => {
   }, [fetchLocationMatrix]);
 
   // console.log(metrics);
-  const features = metrics1.map((item) => ({
+  const features = metrics.map((item) => ({
     type: "Feature",
     geometry: {
       type: "Point",
       coordinates: [parseFloat(item.GeoCode.longitude), parseFloat(item.GeoCode.latitude)],
     },
     properties: {
+      geoCodeId: item.GeoCode.geoCodeId,
       campusName: item.GeoCode.campusName,
       color: "#4ade80",
       areaRating: item.areaRating
@@ -167,8 +172,10 @@ const LocationPage = () => {
     return distance <= circleRadius;
   };
 
-  const handleCircleClick = useCallback((clickPoint) => {
+  const handleCircleClick = useCallback(async (clickPoint) => {
     const CIRCLE_RADIUS = 110; // Radius in meters
+    let isCircleClicked = false;
+
     for (let feature of features) {
       const {geometry, properties} = feature;
       const circleCenter = {
@@ -177,16 +184,28 @@ const LocationPage = () => {
       };
 
       if (isClickInCircle(clickPoint, circleCenter, CIRCLE_RADIUS)) {
-        console.log("Circle clicked:", properties.campusName, circleCenter);
+        isCircleClicked = true;
+        console.log("Circle clicked:", properties.campusName, circleCenter, properties.geoCodeId);
 
-        // Make an API call with the circle's center point
+        try {
+          const userId = await auth.currentUser.getIdToken(true);
+          setGeoCodeId(properties.geoCodeId);
+          await fetchUserReviews(userId, properties.geoCodeId, properties.campusName);
+          // console.log(reviews);
+        } catch (error) {
+          toast.error(error.message);
+        }
 
-      } else {
-        // Location metrics not found logic
-
+        break; // Exit the loop once a match is found
       }
     }
-  }, []);
+
+    if (!isCircleClicked) {
+      // Only trigger error if no circles match the click
+      toast.error("User reviews and location matrix for this area is currently unavailable");
+    }
+  }, [features, fetchUserReviews, reviews]);
+
 
   return (
     <Map
