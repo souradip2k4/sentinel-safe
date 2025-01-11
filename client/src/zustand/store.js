@@ -2,8 +2,6 @@ import {create} from "zustand";
 import {devtools, persist} from "zustand/middleware";
 import {getLocationMatrices, getUserReviewsById} from "@/lib/axios";
 import {AxiosError} from "axios";
-import metrics from "@/components/Dashboard/metrics";
-import reviews from "@/components/Dashboard/Reviews";
 
 const locationMatrixSlice = (set) => ({
   metrics: [],
@@ -70,8 +68,6 @@ const userReviews = (set) => ({
     });
   },
 });
-
-
 
 // Create the combined store
 export const useStore = create(

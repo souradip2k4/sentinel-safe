@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import TextField from "@mui/material/TextField";
-import Accordion from "@mui/material/Accordion";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -24,7 +23,8 @@ const Sidebar = ({collapsed, setCollapsed}) => {
       setUserReview: state.setUserReview
     }))
   );
-  console.log("Geocode ", geoCodeId)
+
+  // console.log("Geocode ", geoCodeId)
   const [expanded, setExpanded] = useState(true);
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState({
@@ -33,6 +33,7 @@ const Sidebar = ({collapsed, setCollapsed}) => {
     review: "",
     geoCodeId: ""
   });
+
   useEffect(() => {
     setInputValue({...inputValue, geoCodeId})
   }, []);
