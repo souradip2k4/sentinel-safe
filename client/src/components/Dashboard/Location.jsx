@@ -8,7 +8,6 @@ import useStore from "@/zustand/store";
 import {auth} from "@/firebase.config";
 import {useShallow} from "zustand/react/shallow";
 import toast from "react-hot-toast";
-import {set} from "zod";
 
 /*const metrics1 = [
   {
@@ -124,8 +123,9 @@ const LocationPage = () => {
 
   const mapRef = useRef(null);
   const [viewState, setViewState] = useState({
-    longitude: 85.8161,
-    latitude: 20.3555,
+    longitude: 85.81855690345947
+    ,
+    latitude: 20.35421246229845,
     zoom: 15,
   });
 
@@ -254,9 +254,9 @@ const LocationPage = () => {
             "circle-radius": 50,
             "circle-color": [
               "case",
-              [">=", ["get", "areaRating"], 4], "#4ade80",
-              [">=", ["get", "areaRating"], 3.5], "#facc15",
-              [">=", ["get", "areaRating"], 3], "#f97316",
+              [">=", ["get", "areaRating"], 3.5], "#4ade80",
+              [">=", ["get", "areaRating"], 2.5], "#facc15",
+              [">=", ["get", "areaRating"], 1.5], "#f97316",
               "#dc2626"
             ],
             "circle-opacity": 0.5,

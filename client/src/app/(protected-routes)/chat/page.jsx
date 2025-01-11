@@ -15,7 +15,7 @@ function Page() {
       if (!auth.currentUser.isAnonymous) {
         setUserName(auth.currentUser.displayName);
       } else {
-        setUserName("Anonymous");
+        setUserName("Guest");
       }
     }
   }, [])
@@ -118,8 +118,7 @@ function Page() {
           />
           <button
             type="submit"
-            className="ml-4 px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
-          >
+            className="ml-4 px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition">
             Send
           </button>
         </form>
