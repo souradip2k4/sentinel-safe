@@ -19,13 +19,10 @@
     "haversine-distance": "^1.2.3",
     "mapbox-gl": "^3.9.0",
     "next": "14.2.21",
-    "otp-input-react": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-map-gl": "^7.1.8",
-    "react-phone-input-2": "^2.15.1",
-    "react-spinners": "^0.15.0",
     "socket.io-client": "^4.8.1",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
