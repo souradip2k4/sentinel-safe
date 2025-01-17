@@ -2,9 +2,8 @@
   "name": "sentinel-safe-backend",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "ts-node index.ts",
     "dev": "nodemon index.ts",
     "postinstall": "prisma generate --schema ./src/prisma/schema.prisma",
     "lint": "eslint .",

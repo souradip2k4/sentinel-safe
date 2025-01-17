@@ -14,8 +14,8 @@ COPY --from=builder /app/package-lock.json .
 COPY --from=builder /app/.next .next
 
 RUN npm install --omit=dev
-RUN ls -l /app
+RUN ls
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm","run","start"]

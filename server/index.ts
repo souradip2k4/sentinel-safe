@@ -24,7 +24,7 @@ import {CustomRequest} from "./src/@types/express";
 
 app.use(compress());
 app.use(
-  cors({origin: process.env.CLIENT_ORIGIN_LOCAL as string, credentials: true})
+  cors({origin: process.env.CLIENT_ORIGIN_SERVER as string, credentials: true})
 );
 
 app.use(helmet());
@@ -35,7 +35,7 @@ app.use(cookieParser());
 
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
-  cors: {origin: process.env.CLIENT_ORIGIN_LOCAL as string,credentials: true ,methods: ["GET", "POST"]},
+  cors: {origin: process.env.CLIENT_ORIGIN_SERVER as string,credentials: true ,methods: ["GET", "POST"]},
 });
 
 app.use("/init", authToken, initRoutes);
