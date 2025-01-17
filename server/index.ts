@@ -11,11 +11,10 @@ import {PrismaClient} from "@prisma/client";
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3300;
+const port = process.env.PORT || 8000;
 export const prisma = new PrismaClient();
 
 import initRoutes from "./src/routes/init";
-// import authRoutes from "./src/routes/auth";
 import getCodeRoutes from "./src/routes/geoCode";
 import locMetricsRoutes from "./src/routes/locmetrics";
 import userReviewRoutes from "./src/routes/userReviews";
@@ -40,7 +39,6 @@ export const io = new Server(httpServer, {
 });
 
 app.use("/init", authToken, initRoutes);
-// app.use("/auth", authRoutes);
 app.use("/geo", authToken, getCodeRoutes);
 app.use("/metrics", locMetricsRoutes);
 app.use("/reviews", authToken, userReviewRoutes);
